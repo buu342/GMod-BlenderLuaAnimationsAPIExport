@@ -42,7 +42,7 @@ def existsKeyframe(frame):
 # Remove newlines and tabs from a file
 def compactFile(file):
     lines = []
-    replacements = {'\n':'', '\t':''}
+    replacements = {'\n':' ', '\t':''}
     
     with open(file) as infile:
         for line in infile:
