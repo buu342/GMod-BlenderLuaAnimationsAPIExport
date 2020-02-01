@@ -15,8 +15,9 @@ The exporter itself can be a bit clunky, since I am not great with Blender's API
 
 ## How to export
 1) Select the armature with the animation you want to export
-2) Click File -> Export -> Lua Animations API Animation (.lua)
-3) Ensure the settings on the bottom left are to your liking
-4) Ensure the file path and file name is to your liking
-5) Click "Lua Animations API Export"
-6) If no errors occured, a dialog box saying "File Exported Successfully" should appear on your mouse.
+2) Ensure the animation has the name you want.
+3) Click File -> Export -> Lua Animations API Animation (.lua)
+4) Ensure the settings on the bottom left are to your liking
+5) Ensure the file path and file name is to your liking
+6) Click "Lua Animations API Export"
+7) If no errors occured, a dialog box saying "File Exported Successfully" should appear on your mouse.
