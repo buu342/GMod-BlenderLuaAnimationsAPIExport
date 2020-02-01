@@ -125,11 +125,11 @@ def writeObject(self, context):
                     if (loc.y != 0):
                         file.write("\t\t\t\t\tMR = %s,\n" % round(loc.y, 2))
                     if (rot.y != 0):
-                        file.write("\t\t\t\t\tRR = %s\n" % round(math.degrees(rot.y)))
+                        file.write("\t\t\t\t\tRR = %s,\n" % round(math.degrees(rot.y)))
                     if (loc.x != 0):
                         file.write("\t\t\t\t\tMF = %s,\n" % round(loc.x, 2))
                     if (rot.x != 0):
-                        file.write("\t\t\t\t\tRF = %s,\n" % round(math.degrees(rot.x)))
+                        file.write("\t\t\t\t\tRF = %s\n" % round(math.degrees(rot.x)))
                     file.write("\t\t\t\t}")
 
             # Write the frameRate
