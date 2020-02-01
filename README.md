@@ -5,6 +5,12 @@ The exporter was tested in Blender 2.77, so I am unsure if it works on later ver
 
 The exporter itself can be a bit clunky, since I am not great with Blender's API. I haven't tested every possible edge case so if any problems arise, feel free to open an Issue. It requires that the base animation which the player is using be set to the default bone pose in Blender. For instance, if you want make a gesture animation for when the player is holding a weapon with the dual hold type, then you need to import that animation into Blender and set the rest pose to that. For an example of what I mean, check the example folder provided.
 
+### Notes on reccomended usage
+* Only keyframe the bones you actually modify. Otherwise you will have unecessary bones in your exported lua file
+* I **highly** reccomend you animate with linear interpolation. To do that, click on the bottom left icon and switch to the "Graph Editor". On the bottom left, select Channel -> Extrapolation Mode -> Linear Extrapolation. This is the mode used by the animations API, so enable it to get the most accurate representation of the final animation.
+* Do not bake animations before exporting. This will create hundreds of unecessary keyframes.
+* Do not animate using Inverse Kinematics. The animations are not baked on export so bones affected by your IK constraints will not have their changes exported.
+
 ## Installation
 1) Download the python file.
 2) Open Blender. Go to File -> User Preferences.
