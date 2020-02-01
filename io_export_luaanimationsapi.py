@@ -116,20 +116,20 @@ def writeObject(self, context):
                     else:
                         file.write(",\n")
                     loc, rot, sca = pbone.matrix_basis.decompose()
-                    rot = pbone.matrix_basis.to_euler() # Is it euler? Check
+                    rot = pbone.matrix_basis.to_euler()
                     file.write("\t\t\t\t['%s'] = {\n" % pbone.name)
                     if (loc.z != 0):
                         file.write("\t\t\t\t\tMU = %s,\n" % round(loc.z, 2))
                     if (rot.z != 0):
                         file.write("\t\t\t\t\tRU = %s,\n" % round(math.degrees(rot.z)))
-                    if (loc.x != 0):
-                        file.write("\t\t\t\t\tMR = %s,\n" % round(loc.x, 2))
-                    if (rot.x != 0):
-                        file.write("\t\t\t\t\tRR = %s,\n" % round(math.degrees(rot.x)))
                     if (loc.y != 0):
-                        file.write("\t\t\t\t\tMF = %s,\n" % round(loc.y, 2))
+                        file.write("\t\t\t\t\tMR = %s,\n" % round(loc.y, 2))
                     if (rot.y != 0):
-                        file.write("\t\t\t\t\tRF = %s\n" % round(math.degrees(rot.y)))
+                        file.write("\t\t\t\t\tRR = %s\n" % round(math.degrees(rot.y)))
+                    if (loc.x != 0):
+                        file.write("\t\t\t\t\tMF = %s,\n" % round(loc.x, 2))
+                    if (rot.x != 0):
+                        file.write("\t\t\t\t\tRF = %s,\n" % round(math.degrees(rot.x)))
                     file.write("\t\t\t\t}")
 
             # Write the frameRate
