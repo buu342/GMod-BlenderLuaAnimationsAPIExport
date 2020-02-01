@@ -1,5 +1,5 @@
 # Lua Animations API Exporter
-An exporter that turns animations in Blender into the format used by [JetBoom's Lua Animations API](https://github.com/JetBoom/animationsapi) for Garry's Mod.
+An exporter that turns animations in Blender into the format used by [JetBoom's Lua Animations API](https://github.com/JetBoom/animationsapi) for Garry's Mod. This was created because I find Blender much easier to use for animation than the built in editor provided by the API.
 
 The exporter was tested in Blender 2.77, so I am unsure if it works on later versions. If someone has **tested this on a newer version** and wishes that I fix it, I shall do so.
 
