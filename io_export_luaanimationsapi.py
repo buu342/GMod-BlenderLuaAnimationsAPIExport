@@ -118,17 +118,17 @@ def writeObject(self, context):
                     loc, rot, sca = pbone.matrix_basis.decompose()
                     rot = pbone.matrix_basis.to_euler()
                     file.write("\t\t\t\t['%s'] = {\n" % pbone.name)
-                    if (loc.z != 0):
+                    if (round(loc.z, 2) != 0):
                         file.write("\t\t\t\t\tMU = %s,\n" % round(loc.z, 2))
-                    if (rot.z != 0):
+                    if (round(math.degrees(rot.z)) != 0):
                         file.write("\t\t\t\t\tRU = %s,\n" % round(math.degrees(rot.z)))
-                    if (loc.y != 0):
+                    if (round(loc.y, 2) != 0):
                         file.write("\t\t\t\t\tMR = %s,\n" % round(loc.y, 2))
-                    if (rot.y != 0):
+                    if (round(math.degrees(rot.y)) != 0):
                         file.write("\t\t\t\t\tRR = %s,\n" % round(math.degrees(rot.y)))
-                    if (loc.x != 0):
+                    if (round(loc.x, 2) != 0):
                         file.write("\t\t\t\t\tMF = %s,\n" % round(loc.x, 2))
-                    if (rot.x != 0):
+                    if (round(math.degrees(rot.x)) != 0):
                         file.write("\t\t\t\t\tRF = %s\n" % round(math.degrees(rot.x)))
                     file.write("\t\t\t\t}")
 
@@ -140,8 +140,11 @@ def writeObject(self, context):
                 file.write("\n\t\t\t},\n\t\t\tFrameRate = %s\n\t\t},\n" % finalFPS)
                 lastFrame = f
                     
-        # Finish by setting the mode
-        file.write("\t},\n\tType = %s\n})" % self.setting_mode)
+        # Finish by setting the interpolation and mode
+        file.write("\t},\n")
+        if self.setting_interpolation != 'INTERP_DEFAULT':
+            file.write("\tInterpolation = %s,\n" % self.setting_interpolation)
+        file.write("\tType = %s\n})" % self.setting_mode)
 
     # Close the file
     file.close()
@@ -169,7 +172,7 @@ class ObjectExport(bpy.types.Operator):
     filter_glob      = bpy.props.StringProperty(default="*.lua", options={'HIDDEN'}, maxlen=255)
     
     # Settings
-    setting_mode     = bpy.props.EnumProperty(
+    setting_mode = bpy.props.EnumProperty(
         name="Animation type",
         items=(('TYPE_GESTURE',  "Gesture", "Gestures are keyframed animations that use the current position and angles of the bones. They play once and then stop automatically."),
                ('TYPE_POSTURE',  "Posture", "Postures are static animations that use the current position and angles of the bones. They stay that way until manually stopped."),
@@ -178,6 +181,16 @@ class ObjectExport(bpy.types.Operator):
                ),
         description="Select the animation type",
         default='TYPE_GESTURE',
+        )
+    setting_interpolation = bpy.props.EnumProperty(
+        name="Interpolation type",
+        items=(('INTERP_DEFAULT', "Default", "The default mode (Usually cosine)"),
+               ('INTERP_LINEAR',  "Linear",  "Straight linear interp."),
+               ('INTERP_COSINE',  "Consine", "Best compatability / quality balance."),
+               ('INTERP_CUBIC',   "Cubic",   "Overall best quality blending but may cause animation frames to go 'over the top'.")
+               ),
+        description="Select the interpolation type",
+        default='INTERP_DEFAULT',
         )
     setting_firstframe      = bpy.props.BoolProperty(name="Include first frame?", description="Include the first frame of animation?", default=True)
     setting_firstframeblank = bpy.props.BoolProperty(name="Blank first frame?", description="Adds a frame of all the untouched bones with no transformations to the first frame.", default=False)
