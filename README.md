@@ -13,7 +13,7 @@ The exporter itself can be a bit clunky, since I am not great with Blender's API
 * Only keyframe the bones you actually modify. Otherwise you will have unecessary bones in your exported lua file
 * I **highly** reccomend you animate with linear interpolation. To do that, click on the bottom left icon and switch to the "Graph Editor". On the bottom left, select Channel -> Extrapolation Mode -> Linear Extrapolation. While the animations API uses Consine by default, it's not very good. This is a more accurate representation.
 * Do not bake animations before exporting. This will create hundreds of unecessary keyframes.
-* Do not animate using Inverse Kinematics. The animations are not baked on export so bones affected by your IK constraints will not have their changes exported.
+* I would not reccomend animating using Inverse Kinematics unless you know exactly what you're doing. The animations are not baked on export so bones affected by your IK constraints will not have their changes exported. If you do, you'll have to bake the animation yourself and then delete all unecessary keyframes manually.
 
 ## Installation
 1) Download the python file.
