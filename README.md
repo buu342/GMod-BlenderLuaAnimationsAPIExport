@@ -21,7 +21,7 @@ The exporter itself can be a bit clunky, since I am not great with Blender's API
 3) Go to Add-ons and click "Install from File..." on the bottom left.
 4) Locate the python file and click the "Install from File..." on the top right.
 5) Ensure that the checkbox named "Import-Export: Lua Animations API animation" is checked.
-6) Press the "Save User Settings" button on the bottom left.
+6) If you are on Blender 2.7, press the "Save User Settings" button on the bottom left. Otherwise, you should be good to go.
 
 ## How to export
 1) Select the armature with the animation you want to export
