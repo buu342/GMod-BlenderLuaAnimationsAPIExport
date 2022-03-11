@@ -2,11 +2,11 @@ bl_info = {
     "name": "Lua Animations API animation",
     "description": "Exports an animation for Jetboom's Lua Animations API.",
     "author": "Buu342",
-    "version": (1, 0),
-    "blender": (2, 77, 0),
-    "location": "File > Export > LUAANIMATIONAPI",
+    "version": (1, 1),
+    "blender": (2, 80, 0),
+    "location": "File > Export > Lua Animations API (.lua)",
     "warning": "",
-    "wiki_url": "",
+    "wiki_url": "https://github.com/buu342/GMod-BlenderLuaAnimationsAPIExport",
     "tracker_url": "",
     "support": 'COMMUNITY',
     "category": "Import-Export"
@@ -18,6 +18,10 @@ from bpy import context
 import mathutils
 import math
 
+# Check which version of Blender we're using
+def isNewBlender():
+    return bpy.app.version >= (2, 80)
+
 # Check if the given bone has a keyframe
 def isKeyframe(ob, frame, data_path, array_index=-1):
     if ob is not None and ob.animation_data is not None and ob.animation_data.action is not None:
@@ -26,7 +30,6 @@ def isKeyframe(ob, frame, data_path, array_index=-1):
                 if array_index == -1 or fcu.array_index == array_index:
                     return frame in (p.co.x for p in fcu.keyframe_points)
     return False
-
 
 # Check if a keyframe exists in a specific frame
 def existsKeyframe(frame):
@@ -37,7 +40,6 @@ def existsKeyframe(frame):
         if frame in (p.co.x for p in fcurve.keyframe_points):
             return True
     return False
-
 
 # Remove newlines and tabs from a file
 def compactFile(file):
@@ -56,15 +58,6 @@ def compactFile(file):
             outfile.write(line)
     outfile.close()
     
-    
-# No armature error
-def popupSuccess(self, context):
-    self.layout.label("File exported successfully!")
-    
-# No armature popup
-def popupNoArmature(self, context):
-    self.layout.label("You need to select an armature with keyframes!")
-
 # Write the data to a file
 def writeObject(self, context):
     object = bpy.context.object
@@ -77,7 +70,7 @@ def writeObject(self, context):
     try:
         animName = object.animation_data.action.name
     except:
-        bpy.context.window_manager.popup_menu(popupNoArmature, title="Error", icon='ERROR')
+        self.report({'ERROR'}, 'You need to select an armature with keyframes!')
         return {'CANCELLED'}
 
     with open(self.filepath, 'w') as file:
@@ -155,9 +148,8 @@ def writeObject(self, context):
         
     # Reset the frame position and return that we finished
     scene.frame_set(currentFrame)
-    bpy.context.window_manager.popup_menu(popupSuccess, title="Success", icon='INFO')
+    self.report({'INFO'}, 'File exported sucessfully!')
     return {'FINISHED'}
-
 
 # Our export function
 class ObjectExport(bpy.types.Operator):
@@ -167,9 +159,9 @@ class ObjectExport(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
     
     # Filepath variables
-    filepath = bpy.props.StringProperty(subtype='FILE_PATH')    
+    filepath     = bpy.props.StringProperty(subtype='FILE_PATH')    
     filename_ext = ".lua"
-    filter_glob      = bpy.props.StringProperty(default="*.lua", options={'HIDDEN'}, maxlen=255)
+    filter_glob  = bpy.props.StringProperty(default="*.lua", options={'HIDDEN'}, maxlen=255)
     
     # Settings
     setting_mode = bpy.props.EnumProperty(
@@ -196,6 +188,18 @@ class ObjectExport(bpy.types.Operator):
     setting_firstframeblank = bpy.props.BoolProperty(name="Blank first frame?", description="Adds a frame of all the untouched bones with no transformations to the first frame.", default=False)
     setting_compact         = bpy.props.BoolProperty(name="Compact?", description="Removes all formatting from the exported file (no tabs or new lines).", default=False)
     
+    # If we are running on Blender 2.9.3 or newer, it will expect the new "annotation"
+    # syntax on these parameters. In order to make newer versions of blender happy
+    # we will hack these parameters into the annotation dictionary
+    if isNewBlender():
+        __annotations__ = {"filter_glob" : filter_glob,
+                           "setting_mode" : setting_mode,
+                           "setting_interpolation" : setting_interpolation,
+                           "setting_firstframe" : setting_firstframe,
+                           "setting_firstframeblank" : setting_firstframeblank,
+                           "setting_compact" : setting_compact,
+                           "filepath" : filepath}
+    
     # Code to run when the export button is pressed
     def execute(self, context):
         self.filepath = bpy.path.ensure_ext(self.filepath, self.filename_ext)            
@@ -209,21 +213,25 @@ class ObjectExport(bpy.types.Operator):
         context.window_manager.fileselect_add(self)
         return {'RUNNING_MODAL'}
 
-
 # Add trigger into a dynamic menu
 def menu_func_export(self, context):
     self.layout.operator(ObjectExport.bl_idname, text="Lua Animations API Animation (.lua)")
-    
 
 # Class registerer
 def register():
     bpy.utils.register_class(ObjectExport)
-    bpy.types.INFO_MT_file_export.append(menu_func_export)
+    if (isNewBlender()):
+        bpy.types.TOPBAR_MT_file_export.append(menu_func_export)
+    else:
+        bpy.types.INFO_MT_file_export.append(menu_func_export)
 
 # Class unregisterer
 def unregister():
     bpy.utils.unregister_class(ObjectExport)
-    bpy.types.INFO_MT_file_export.remove(menu_func_export)
+    if (isNewBlender()):
+        bpy.types.TOPBAR_MT_file_export.remove(menu_func_export)
+    else:
+        bpy.types.INFO_MT_file_export.remove(menu_func_export)
 
 # Main function
 if __name__ == "__main__":
