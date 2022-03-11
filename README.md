@@ -5,7 +5,7 @@
 
 An exporter that turns animations in Blender into the format used by [JetBoom's Lua Animations API](https://github.com/JetBoom/animationsapi) for Garry's Mod. This was created because I find Blender much easier to use for animation than the built in editor provided by the API.
 
-The exporter was tested in Blender 2.77, so I am unsure if it works on later versions. If someone has **tested this on a newer version** and wishes that I fix it, I shall do so.
+The exporter works on any version of Blender that is older than 2.7 (inclusive). When installing in 2.7, you will get a warning that this plugin is designed for a later version, **you can safely ignore this warning**.
 
 The exporter itself can be a bit clunky, since I am not great with Blender's API. I haven't tested every possible edge case so if any problems arise, feel free to open an Issue. It requires that the base animation which the player is using be set to the default bone pose in Blender. For instance, if you want make a gesture animation for when the player is holding a weapon with the dual hold type, then you need to import that animation into Blender and set the rest pose to that. For an example of what I mean, check the example folder provided.
 
